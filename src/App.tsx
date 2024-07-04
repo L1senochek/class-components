@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import './App.css';
+import SearchBar from './components/SearchBar/SearchBar';
 
 interface IAppProps {}
 
@@ -19,10 +20,25 @@ class App extends React.Component<IAppProps, IAppState> {
     };
   }
 
+  handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ searchTerm: event.target.value });
+  };
+
+  handleSearchSubmit = () => {
+    const { searchTerm } = this.state;
+    console.log(searchTerm);
+  };
+
   render() {
+    const { searchTerm } = this.state;
+
     return (
       <>
-        SearchBar
+        <SearchBar
+          searchTerm={searchTerm}
+          onInputChange={this.handleSearchInputChange}
+          onSearchSubmit={this.handleSearchSubmit}
+        />
         <button>Throw Error</button>
         SearchResults
       </>
