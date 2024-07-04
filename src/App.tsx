@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import './App.css';
 import SearchBar from './components/SearchBar/SearchBar';
+import SearchResults from './components/SearchResults/SearchResults';
 
 interface IAppProps {}
 
@@ -15,6 +16,9 @@ export interface IGoogleBooksApiItem {
   volumeInfo: {
     title: string;
     description?: string;
+    imageLinks?: {
+      thumbnail: string;
+    };
   };
 }
 
@@ -61,6 +65,9 @@ class App extends React.Component<IAppProps, IAppState> {
             (item: IGoogleBooksApiItem): IGoogleBooksApiItem => ({
               id: item.id,
               volumeInfo: {
+                imageLinks: item.volumeInfo.imageLinks
+                  ? { thumbnail: item.volumeInfo.imageLinks.thumbnail }
+                  : undefined,
                 title: item.volumeInfo.title,
                 description:
                   item.volumeInfo.description ?? 'No description available',
@@ -92,8 +99,12 @@ class App extends React.Component<IAppProps, IAppState> {
     console.log(searchTerm);
   };
 
+  throwError = () => {
+    throw new Error('Test error');
+  };
+
   render() {
-    const { searchTerm } = this.state;
+    const { searchTerm, searchResults, error } = this.state;
 
     return (
       <>
@@ -102,8 +113,8 @@ class App extends React.Component<IAppProps, IAppState> {
           onInputChange={this.handleSearchInputChange}
           onSearchSubmit={this.handleSearchSubmit}
         />
-        <button>Throw Error</button>
-        SearchResults
+        <button onClick={this.throwError}>Throw Error</button>
+        <SearchResults searchResults={searchResults} error={error} />
       </>
     );
   }
