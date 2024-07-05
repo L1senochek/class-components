@@ -3,6 +3,7 @@ import {
   IErrorBoundaryProps,
   IErrorBoundaryState,
 } from '../../model/ErrorBoundary';
+import styles from './errorboundary.module.css';
 
 class ErrorBoundary extends React.Component<
   IErrorBoundaryProps,
@@ -30,9 +31,12 @@ class ErrorBoundary extends React.Component<
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="error">
-          <h2 className="error__title">Something went wrong...</h2>
-          <button className="error__btn" onClick={this.handleReloadClick}>
+        <div className={styles.error}>
+          <h2 className={styles.error__title}>Something went wrong...</h2>
+          <button
+            className={styles.error__btn}
+            onClick={this.handleReloadClick}
+          >
             Reload
           </button>
         </div>

@@ -21,13 +21,16 @@ class SearchBar extends React.Component<ISearchBarProps> {
     return (
       <div className={styles.searchbar}>
         <input
+          className={styles.searchbar__input}
           type="text"
           value={searchTerm}
           onChange={onInputChange}
           placeholder="Search..."
           onKeyUp={this.onSearchSubmitEnter}
         />
-        <button onClick={onSearchSubmit}>Search</button>
+        <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
+          Search
+        </button>
       </div>
     );
   }

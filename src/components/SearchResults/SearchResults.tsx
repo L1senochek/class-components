@@ -9,20 +9,25 @@ class SearchResults extends React.Component<ISearchResultsProps> {
     return (
       <div className={styles.searchresults}>
         {searchResults.length > 0 ? (
-          <ul>
+          <>
             {searchResults.map((result) => (
-              <li key={result.id}>
-                <strong>{result.volumeInfo.title}</strong>
+              <div key={result.id} className={styles.searchresults__card}>
+                <h3 className={styles.searchresults__title}>
+                  {result.volumeInfo.title}
+                </h3>
                 <img
+                  className={styles.searchresults__img}
                   src={result.volumeInfo.imageLinks?.thumbnail}
                   alt={result.volumeInfo.title}
                 />
-                <p>{result.volumeInfo.description}</p>
-              </li>
+                <p className={styles.searchresults__description}>
+                  {result.volumeInfo.description}
+                </p>
+              </div>
             ))}
-          </ul>
+          </>
         ) : (
-          <p>No results found</p>
+          <p className={styles.searchresults__noresults}>No results found</p>
         )}
       </div>
     );

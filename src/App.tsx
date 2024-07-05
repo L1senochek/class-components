@@ -90,17 +90,17 @@ class App extends React.Component<IAppProps, IAppState> {
 
     return (
       <>
-        <div className="topsection">
+        <header className="top-section">
           <SearchBar
             searchTerm={searchTerm}
             onInputChange={this.handleSearchInputChange}
             onSearchSubmit={this.handleSearchSubmit}
           />
           <button onClick={this.handleThrowError}>Throw Error</button>
-        </div>
-        <div className="middlesection">
+        </header>
+        <main className="middle-section">
           <SearchResults searchResults={searchResults} />
-        </div>
+        </main>
       </>
     );
   }
