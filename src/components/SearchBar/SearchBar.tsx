@@ -1,11 +1,6 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { KeyboardEvent } from 'react';
 import styles from './searchbar.module.css';
-
-interface ISearchBarProps {
-  searchTerm: string;
-  onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onSearchSubmit: () => void;
-}
+import ISearchBarProps from '../../model/SearchBar';
 
 class SearchBar extends React.Component<ISearchBarProps> {
   public constructor(props: ISearchBarProps) {

@@ -1,12 +1,8 @@
 import React from 'react';
 import styles from './searchresults.module.css';
-import { IGoogleBooksApiItem } from '../../App';
+import ISearchResultsProps from '../../model/SearchResults';
 
-interface SearchResultsProps {
-  searchResults: IGoogleBooksApiItem[];
-}
-
-class SearchResults extends React.Component<SearchResultsProps> {
+class SearchResults extends React.Component<ISearchResultsProps> {
   public render() {
     const { searchResults } = this.props;
 
