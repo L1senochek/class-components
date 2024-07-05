@@ -8,6 +8,7 @@
 }
 
 .searchresults__noresults {
+  width: 100%;
   font-size: 1.5rem;
 }
 
@@ -16,12 +17,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  max-width: 310px;
-  max-height: 700px;
+  width: 310px;
+  height: 700px;
   padding: 2rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.87);
   gap: 10px;
+}
+
+.searchresults__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .searchresults__img {
