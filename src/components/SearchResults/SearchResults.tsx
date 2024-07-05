@@ -4,18 +4,11 @@ import { IGoogleBooksApiItem } from '../../App';
 
 interface SearchResultsProps {
   searchResults: IGoogleBooksApiItem[];
-  error: Error | null;
 }
 
 class SearchResults extends React.Component<SearchResultsProps> {
-  render() {
-    const { searchResults, error } = this.props;
-
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    }
-
-    console.log(searchResults, 11111111111);
+  public render() {
+    const { searchResults } = this.props;
 
     return (
       <div className={styles.searchresults}>

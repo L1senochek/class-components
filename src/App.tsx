@@ -9,6 +9,7 @@ interface IAppState {
   searchTerm: string;
   searchResults: IGoogleBooksApiItem[];
   error: Error | null;
+  throwError: boolean;
 }
 
 export interface IGoogleBooksApiItem {
@@ -23,16 +24,17 @@ export interface IGoogleBooksApiItem {
 }
 
 class App extends React.Component<IAppProps, IAppState> {
-  constructor(props: IAppProps) {
+  public constructor(props: IAppProps) {
     super(props);
     this.state = {
       searchTerm: '',
       searchResults: [],
       error: null,
+      throwError: false,
     };
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
       this.setState({ searchTerm: savedSearchTerm });
@@ -42,7 +44,7 @@ class App extends React.Component<IAppProps, IAppState> {
     }
   }
 
-  fetchSearchResults = async (
+  private fetchSearchResults = async (
     term: string,
     limit: number = 10,
     page: number = 1
@@ -59,7 +61,6 @@ class App extends React.Component<IAppProps, IAppState> {
       }
 
       const data = await response.json();
-
       const items: IGoogleBooksApiItem[] = data.items
         ? data.items.map(
             (item: IGoogleBooksApiItem): IGoogleBooksApiItem => ({
@@ -77,9 +78,6 @@ class App extends React.Component<IAppProps, IAppState> {
         : [];
 
       this.setState({ searchResults: items, error: null });
-
-      console.log(data, data.items);
-
       localStorage.setItem('searchTerm', term.trim());
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -89,32 +87,39 @@ class App extends React.Component<IAppProps, IAppState> {
     }
   };
 
-  handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  private handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     this.setState({ searchTerm: event.target.value });
   };
 
-  handleSearchSubmit = () => {
+  private handleSearchSubmit = () => {
     const { searchTerm } = this.state;
     this.fetchSearchResults(searchTerm);
-    console.log(searchTerm);
   };
 
-  throwError = () => {
-    throw new Error('Test error');
+  private handleThrowError = () => {
+    this.setState({ throwError: true });
   };
 
-  render() {
-    const { searchTerm, searchResults, error } = this.state;
+  public render() {
+    const { searchTerm, searchResults, throwError } = this.state;
+
+    if (throwError) {
+      throw new Error('Test error');
+    }
 
     return (
       <>
-        <SearchBar
-          searchTerm={searchTerm}
-          onInputChange={this.handleSearchInputChange}
-          onSearchSubmit={this.handleSearchSubmit}
-        />
-        <button onClick={this.throwError}>Throw Error</button>
-        <SearchResults searchResults={searchResults} error={error} />
+        <div className="topsection">
+          <SearchBar
+            searchTerm={searchTerm}
+            onInputChange={this.handleSearchInputChange}
+            onSearchSubmit={this.handleSearchSubmit}
+          />
+          <button onClick={this.handleThrowError}>Throw Error</button>
+        </div>
+        <div className="middlesection">
+          <SearchResults searchResults={searchResults} />
+        </div>
       </>
     );
   }
