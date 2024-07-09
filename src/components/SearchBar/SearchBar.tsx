@@ -2,38 +2,35 @@ import React, { KeyboardEvent } from 'react';
 import styles from './searchbar.module.css';
 import ISearchBarProps from '../../model/SearchBar';
 
-class SearchBar extends React.Component<ISearchBarProps> {
-  public constructor(props: ISearchBarProps) {
-    super(props);
-    this.onSearchSubmitEnter = this.onSearchSubmitEnter.bind(this);
-  }
-
-  private onSearchSubmitEnter(event: KeyboardEvent<HTMLInputElement>) {
+const SearchBar: React.FC<ISearchBarProps> = ({
+  searchTerm,
+  onInputChange,
+  onSearchSubmit,
+}): JSX.Element => {
+  const onSearchSubmitEnter = (
+    event: KeyboardEvent<HTMLInputElement>
+  ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      this.props.onSearchSubmit();
+      onSearchSubmit();
     }
-  }
+  };
 
-  public render() {
-    const { searchTerm, onInputChange, onSearchSubmit } = this.props;
-
-    return (
-      <div className={styles.searchbar}>
-        <input
-          className={styles.searchbar__input}
-          type="text"
-          value={searchTerm}
-          onChange={onInputChange}
-          placeholder="Search..."
-          onKeyUp={this.onSearchSubmitEnter}
-        />
-        <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.searchbar}>
+      <input
+        className={styles.searchbar__input}
+        type="text"
+        value={searchTerm}
+        onChange={onInputChange}
+        placeholder="Search..."
+        onKeyUp={onSearchSubmitEnter}
+      />
+      <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
+        Search
+      </button>
+    </div>
+  );
+};
 
 export default SearchBar;
