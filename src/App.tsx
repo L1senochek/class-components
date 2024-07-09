@@ -1,35 +1,20 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import './App.css';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchResults from './components/SearchResults/SearchResults';
-import { IAppProps, IAppState, IGoogleBooksApiItem } from './model/App';
+import { IAppProps, IGoogleBooksApiItem } from './model/App';
 
-class App extends React.Component<IAppProps, IAppState> {
-  public constructor(props: IAppProps) {
-    super(props);
-    this.state = {
-      searchTerm: '',
-      searchResults: [],
-      error: null,
-      throwError: false,
-    };
-  }
+const App: React.FC<IAppProps> = (): JSX.Element => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<IGoogleBooksApiItem[]>([]);
+  const [, setError] = useState<null | Error>(null);
+  const [throwError, setThrowError] = useState<boolean>(false);
 
-  public componentDidMount() {
-    const savedSearchTerm = localStorage.getItem('searchTerm');
-    if (savedSearchTerm) {
-      this.setState({ searchTerm: savedSearchTerm });
-      this.fetchSearchResults(savedSearchTerm);
-    } else {
-      this.fetchSearchResults('');
-    }
-  }
-
-  private fetchSearchResults = async (
+  const fetchSearchResults = async (
     term: string,
     limit: number = 10,
     page: number = 1
-  ) => {
+  ): Promise<void> => {
     try {
       const offset = (page - 1) * limit;
       const query =
@@ -58,52 +43,55 @@ class App extends React.Component<IAppProps, IAppState> {
           )
         : [];
 
-      this.setState({ searchResults: items, error: null });
+      setSearchResults(items);
       localStorage.setItem('searchTerm', term.trim());
     } catch (error) {
       console.error('Error fetching data:', error);
-      this.setState({
-        error: error instanceof Error ? error : new Error('Unknown error'),
-      });
+      const newError =
+        error instanceof Error ? error : new Error('Unknown error');
+      setError(newError);
     }
   };
 
-  private handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: event.target.value });
-  };
-
-  private handleSearchSubmit = () => {
-    const { searchTerm } = this.state;
-    this.fetchSearchResults(searchTerm);
-  };
-
-  private handleThrowError = () => {
-    this.setState({ throwError: true });
-  };
-
-  public render() {
-    const { searchTerm, searchResults, throwError } = this.state;
-
-    if (throwError) {
-      throw new Error('Test error');
+  useEffect((): void => {
+    const savedSearchTerm = localStorage.getItem('searchTerm');
+    if (savedSearchTerm) {
+      setSearchTerm(savedSearchTerm);
+      fetchSearchResults(savedSearchTerm);
+    } else {
+      fetchSearchResults('');
     }
+  }, [setSearchTerm]);
 
-    return (
-      <>
-        <header className="top-section">
-          <SearchBar
-            searchTerm={searchTerm}
-            onInputChange={this.handleSearchInputChange}
-            onSearchSubmit={this.handleSearchSubmit}
-          />
-          <button onClick={this.handleThrowError}>Throw Error</button>
-        </header>
-        <main className="middle-section">
-          <SearchResults searchResults={searchResults} />
-        </main>
-      </>
-    );
+  const handleSearchInputChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => setSearchTerm(event.target.value);
+
+  const handleSearchSubmit = (): void => {
+    fetchSearchResults(searchTerm);
+  };
+
+  const handleThrowError = (): void => setThrowError(true);
+
+  if (throwError) {
+    throw new Error('Test error');
   }
-}
+
+  return (
+    <>
+      <header className="top-section">
+        <SearchBar
+          searchTerm={searchTerm}
+          onInputChange={handleSearchInputChange}
+          onSearchSubmit={handleSearchSubmit}
+        />
+        <button onClick={handleThrowError}>Throw Error</button>
+      </header>
+      <main className="middle-section">
+        <SearchResults searchResults={searchResults} />
+      </main>
+    </>
+  );
+};
 
 export default App;
