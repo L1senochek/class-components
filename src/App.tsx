@@ -3,9 +3,10 @@ import './App.css';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchResults from './components/SearchResults/SearchResults';
 import { IAppProps, IGoogleBooksApiItem } from './model/App';
+import useSearchQuery from './hooks/useSearchQuery';
 
 const App: React.FC<IAppProps> = (): JSX.Element => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useSearchQuery('');
   const [searchResults, setSearchResults] = useState<IGoogleBooksApiItem[]>([]);
   const [, setError] = useState<null | Error>(null);
   const [throwError, setThrowError] = useState<boolean>(false);
