@@ -1,14 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useSearchQuery from '../../hooks/useSearchQuery';
 import { IAppProps, IGoogleBooksApiItem } from '../../model/App';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import SearchResults from '../../components/SearchResults/SearchResults';
+import Pagination from '../../components/Pagination/Pagination';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useSearchQuery('');
   const [searchResults, setSearchResults] = useState<IGoogleBooksApiItem[]>([]);
   const [, setError] = useState<null | Error>(null);
   const [throwError, setThrowError] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   const fetchSearchResults = async (
     term: string,
@@ -57,18 +61,20 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
       setSearchTerm(savedSearchTerm);
-      fetchSearchResults(savedSearchTerm);
+      fetchSearchResults(savedSearchTerm, 10, currentPage);
     } else {
-      fetchSearchResults('');
+      fetchSearchResults('', 10, currentPage);
     }
-  }, [setSearchTerm]);
+  }, [setSearchTerm, currentPage]);
 
   const handleSearchInputChange = (
     event: ChangeEvent<HTMLInputElement>
   ): void => setSearchTerm(event.target.value);
 
   const handleSearchSubmit = (): void => {
-    fetchSearchResults(searchTerm);
+    fetchSearchResults(searchTerm, 10, 1);
+    searchParams.set('page', '1');
+    setSearchParams(searchParams);
   };
 
   const handleThrowError = (): void => setThrowError(true);
@@ -89,6 +95,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
       </header>
       <main className="middle-section">
         <SearchResults searchResults={searchResults} />
+        <Pagination totalItems={100} itemsPerPage={10} />
       </main>
     </>
   );
