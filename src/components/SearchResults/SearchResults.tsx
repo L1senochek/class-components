@@ -4,13 +4,18 @@ import ISearchResultsProps from '../../model/SearchResults';
 
 const SearchResults: React.FC<ISearchResultsProps> = ({
   searchResults,
+  onItemClick,
 }): JSX.Element => {
   return (
     <div className={styles.searchresults}>
       {searchResults.length > 0 ? (
         <>
           {searchResults.map((result) => (
-            <div key={result.login} className={styles.searchresults__card}>
+            <div
+              key={result.id}
+              className={styles.searchresults__card}
+              onClick={() => onItemClick(result.id)}
+            >
               <div className={styles.searchresults__header}>
                 <h3 className={styles.searchresults__title}>{result.login}</h3>
                 {result.avatar_url && (

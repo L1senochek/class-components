@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import useSearchQuery from '../../hooks/useSearchQuery';
 import { IAppProps } from '../../model/App';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -7,6 +7,7 @@ import SearchResults from '../../components/SearchResults/SearchResults';
 import Pagination from '../../components/Pagination/Pagination';
 import Limit from '../../components/Limit/Limit';
 import styles from './main-page.module.css';
+import CardModal from '../../components/CardModal/CardModal';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [searchResults, setSearchResults] = useState([]);
@@ -16,11 +17,12 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useSearchQuery('');
   const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const limit = parseInt(searchParams.get('limit') || '10', 10);
-
-  console.log(searchResults, searchParams, currentPage, totalUsers);
 
   const fetchGitHubUsers = async (
     term: string,
@@ -64,6 +66,8 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     } else {
       fetchGitHubUsers('', limit, currentPage);
     }
+    localStorage.setItem('currentPage', currentPage.toString());
+    localStorage.setItem('limit', limit.toString());
   }, [setSearchTerm, currentPage, limit]);
 
   const handleSearchInputChange = (value: string): void => {
@@ -74,6 +78,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     searchParams.set('limit', newLimit.toString());
     searchParams.set('page', '1');
     setSearchParams(searchParams);
+    localStorage.setItem('limit', newLimit.toString());
     fetchGitHubUsers(searchTerm, newLimit, 1);
   };
 
@@ -87,7 +92,13 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const handlePageChange = (newPage: number): void => {
     searchParams.set('page', newPage.toString());
     setSearchParams(searchParams);
+    localStorage.setItem('currentPage', newPage.toString());
     fetchGitHubUsers(searchTerm, limit, newPage);
+  };
+
+  const handleItemClick = (itemId: string): void => {
+    setSelectedItemId(itemId);
+    navigate(`/main/user/${itemId}`);
   };
 
   const handleThrowError = (): void => setThrowError(true);
@@ -111,7 +122,10 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <SearchResults searchResults={searchResults} />
+          <SearchResults
+            searchResults={searchResults}
+            onItemClick={handleItemClick}
+          />
         )}
         <Pagination
           totalItems={totalUsers}
@@ -119,6 +133,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
+        {selectedItemId && <CardModal />}
       </main>
     </>
   );
