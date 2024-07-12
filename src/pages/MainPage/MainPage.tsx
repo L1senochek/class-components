@@ -16,6 +16,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const limit = parseInt(searchParams.get('limit') || '10', 10);
   const [totalUsers, setTotalUsers] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   console.log(searchResults, searchParams, currentPage, totalUsers);
 
@@ -24,6 +25,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     limit: number = 10,
     page: number = 1
   ): Promise<void> => {
+    setIsLoading(true);
     try {
       const query =
         term.trim() !== '' ? encodeURIComponent(term.trim()) : 'octocat';
@@ -44,6 +46,8 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
       const newError =
         error instanceof Error ? error : new Error('Unknown error');
       setError(newError);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -102,7 +106,11 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
       </header>
       <main className="middle-section">
         <Limit limit={limit} onLimitChange={handleLimitChange} />
-        <SearchResults searchResults={searchResults} />
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <SearchResults searchResults={searchResults} />
+        )}
         <Pagination totalItems={totalUsers} itemsPerPage={limit} />
       </main>
     </>
