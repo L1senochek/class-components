@@ -27,8 +27,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   ): Promise<void> => {
     setIsLoading(true);
     try {
-      const query =
-        term.trim() !== '' ? encodeURIComponent(term.trim()) : 'octocat';
+      const query = term.trim() !== '' ? encodeURIComponent(term.trim()) : '';
       const url = `https://api.github.com/search/users?q=${query}&per_page=${limit}&page=${page}`;
 
       const response = await fetch(url);
@@ -61,16 +60,6 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     }
   }, [setSearchTerm, currentPage, limit]);
 
-  useEffect(() => {
-    const savedSearchTerm = localStorage.getItem('searchTerm');
-    if (savedSearchTerm) {
-      setSearchTerm(savedSearchTerm);
-      fetchGitHubUsers(savedSearchTerm, limit, currentPage);
-    } else {
-      fetchGitHubUsers('', limit, currentPage);
-    }
-  }, [setSearchTerm, currentPage, limit]);
-
   const handleSearchInputChange = (
     event: ChangeEvent<HTMLInputElement>
   ): void => setSearchTerm(event.target.value);
@@ -83,9 +72,10 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   };
 
   const handleSearchSubmit = (): void => {
-    fetchGitHubUsers(searchTerm, limit, 1);
+    searchParams.set('query', searchTerm);
     searchParams.set('page', '1');
     setSearchParams(searchParams);
+    fetchGitHubUsers(searchTerm, limit, 1);
   };
 
   const handleThrowError = (): void => setThrowError(true);

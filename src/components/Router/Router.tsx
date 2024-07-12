@@ -13,7 +13,7 @@ const Router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path={'/'} element={<Layout />} errorElement={<ErrorMessage />}>
-        <Route path="" element={<Navigate to={'/main'} />} />
+        <Route path="" element={<Navigate to={'/main?page=1&limit=10'} />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
