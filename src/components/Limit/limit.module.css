@@ -1,0 +1,15 @@
+.limit {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.limit__select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  min-height: 30px;
+  padding: 10px;
+}
