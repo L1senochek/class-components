@@ -5,24 +5,25 @@ import ISearchResultsProps from '../../model/SearchResults';
 const SearchResults: React.FC<ISearchResultsProps> = ({
   searchResults,
 }): JSX.Element => {
+  console.log(searchResults);
   return (
     <div className={styles.searchresults}>
       {searchResults.length > 0 ? (
         <>
           {searchResults.map((result) => (
-            <div key={result.id} className={styles.searchresults__card}>
+            <div key={result.login} className={styles.searchresults__card}>
               <div className={styles.searchresults__header}>
-                <h3 className={styles.searchresults__title}>
-                  {result.volumeInfo.title}
-                </h3>
-                <img
-                  className={styles.searchresults__img}
-                  src={result.volumeInfo.imageLinks?.thumbnail}
-                  alt={result.volumeInfo.title}
-                />
+                <h3 className={styles.searchresults__title}>{result.login}</h3>
+                {result.avatar_url && (
+                  <img
+                    className={styles.searchresults__img}
+                    src={result.avatar_url}
+                    alt={result.login}
+                  />
+                )}
               </div>
               <p className={styles.searchresults__description}>
-                {result.volumeInfo.description}
+                {result.html_url}
               </p>
             </div>
           ))}
