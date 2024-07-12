@@ -1,8 +1,6 @@
-import { ChangeEvent } from 'react';
-
 interface ISearchBarProps {
   searchTerm: string;
-  onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (value: string) => void;
   onSearchSubmit: () => void;
 }
 

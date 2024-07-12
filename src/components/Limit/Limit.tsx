@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import styles from './limit.module.css';
 
 interface ILimitProps {
   limit: number;
@@ -20,9 +21,14 @@ const Limit: React.FC<ILimitProps> = ({
   };
 
   return (
-    <div>
+    <div className={styles.limit}>
       <label htmlFor="limit-select">Items per page:</label>
-      <select id="limit-select" value={limit} onChange={handleLimitChange}>
+      <select
+        className={styles.limit__select}
+        id="limit-select"
+        value={limit}
+        onChange={handleLimitChange}
+      >
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="30">30</option>

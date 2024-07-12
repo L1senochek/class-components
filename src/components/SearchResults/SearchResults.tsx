@@ -5,7 +5,6 @@ import ISearchResultsProps from '../../model/SearchResults';
 const SearchResults: React.FC<ISearchResultsProps> = ({
   searchResults,
 }): JSX.Element => {
-  console.log(searchResults);
   return (
     <div className={styles.searchresults}>
       {searchResults.length > 0 ? (
@@ -33,7 +32,6 @@ const SearchResults: React.FC<ISearchResultsProps> = ({
       )}
     </div>
   );
-  // }
 };
 
 export default SearchResults;

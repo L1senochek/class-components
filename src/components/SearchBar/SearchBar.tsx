@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 import styles from './searchbar.module.css';
 import ISearchBarProps from '../../model/SearchBar';
 
@@ -7,6 +7,17 @@ const SearchBar: React.FC<ISearchBarProps> = ({
   onInputChange,
   onSearchSubmit,
 }): JSX.Element => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    onInputChange(event.target.value);
+  };
+
+  const handleKeyUp = (event: KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onSearchSubmitEnter(event);
+    }
+  };
+
   const onSearchSubmitEnter = (
     event: KeyboardEvent<HTMLInputElement>
   ): void => {
@@ -22,9 +33,9 @@ const SearchBar: React.FC<ISearchBarProps> = ({
         className={styles.searchbar__input}
         type="text"
         value={searchTerm}
-        onChange={onInputChange}
+        onChange={handleChange}
         placeholder="Search..."
-        onKeyUp={onSearchSubmitEnter}
+        onKeyUp={handleKeyUp}
       />
       <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
         Search

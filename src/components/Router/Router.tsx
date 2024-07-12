@@ -9,11 +9,18 @@ import ErrorMessage from '../../pages/ErrorMessage/ErrorMessage';
 import Layout from '../../layouts/Layout';
 import MainPage from '../../pages/MainPage/MainPage';
 
+const savedQuery = localStorage.getItem('searchTerm') || '';
+
 const Router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path={'/'} element={<Layout />} errorElement={<ErrorMessage />}>
-        <Route path="" element={<Navigate to={'/main?page=1&limit=10'} />} />
+        <Route
+          path=""
+          element={
+            <Navigate to={`/main?page=1&limit=10&query=${savedQuery}`} />
+          }
+        />
         <Route path="/main" element={<MainPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>

@@ -1,25 +1,40 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styles from './pagination.module.css';
+import { MAX_ITEMS_LIMIT } from '../../utils/const';
 
 interface PaginationProps {
   totalItems: number;
-  itemsPerPage: number;
+  limit: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   totalItems,
-  itemsPerPage,
+  limit,
+  currentPage,
+  onPageChange,
 }): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const totalPages = Math.min(
+    Math.ceil(totalItems / limit),
+    Math.ceil(MAX_ITEMS_LIMIT / limit)
+  );
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
       searchParams.set('page', page.toString());
       setSearchParams(searchParams);
+      onPageChange(page);
     }
+  };
+
+  const goToFirstPage = () => {
+    searchParams.set('page', '1');
+    setSearchParams(searchParams);
+    onPageChange(1);
   };
 
   const renderPageNumbers = () => {
@@ -29,7 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         key={1}
         className={currentPage === 1 ? styles.active : ''}
-        onClick={() => handlePageChange(1)}
+        onClick={goToFirstPage}
       >
         1
       </button>
