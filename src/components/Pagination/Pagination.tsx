@@ -41,7 +41,6 @@ const Pagination: React.FC<PaginationProps> = ({
 
     const startPage = Math.max(2, currentPage - 1);
     const endPage = Math.min(totalPages - 1, currentPage + 1);
-
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <button
@@ -57,15 +56,18 @@ const Pagination: React.FC<PaginationProps> = ({
     if (currentPage < totalPages - 1) {
       pages.push(<span key="end-dots">...</span>);
     }
-    pages.push(
-      <button
-        key={totalPages}
-        className={currentPage === totalPages ? styles.active : ''}
-        onClick={() => handlePageChange(totalPages)}
-      >
-        {totalPages}
-      </button>
-    );
+
+    if (totalPages > 1) {
+      pages.push(
+        <button
+          key={totalPages}
+          className={currentPage === totalPages ? styles.active : ''}
+          onClick={() => handlePageChange(totalPages)}
+        >
+          {totalPages}
+        </button>
+      );
+    }
 
     return pages;
   };
