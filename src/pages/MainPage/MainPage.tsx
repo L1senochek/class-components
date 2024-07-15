@@ -8,6 +8,7 @@ import Pagination from '../../components/Pagination/Pagination';
 import Limit from '../../components/Limit/Limit';
 import styles from './main-page.module.css';
 import CardModal from '../../components/CardModal/CardModal';
+import IconGitHubLogo from '../../components/Icons/iconGitHub/iconGitHub';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [searchResults, setSearchResults] = useState([]);
@@ -110,11 +111,18 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   return (
     <>
       <header className={styles['top-section']}>
-        <SearchBar
-          searchTerm={searchTerm}
-          onInputChange={handleSearchInputChange}
-          onSearchSubmit={handleSearchSubmit}
-        />
+        <div className={styles.logo}>
+          <div className={styles.logo__wrapper}>
+            <IconGitHubLogo />
+            <h1 className={styles.logo__title}>GitHub API</h1>
+          </div>
+          <SearchBar
+            searchTerm={searchTerm}
+            onInputChange={handleSearchInputChange}
+            onSearchSubmit={handleSearchSubmit}
+          />
+        </div>
+
         <button onClick={handleThrowError}>Throw Error</button>
       </header>
       <main className={styles['middle-section']}>

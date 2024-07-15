@@ -5,6 +5,7 @@
   width: 100%;
   gap: 20px;
 }
+
 .middle-section {
   display: flex;
   width: 100%;
@@ -14,4 +15,22 @@
   min-height: 70vh;
   padding: 1rem 0;
   gap: 20px;
+}
+
+.logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logo__title {
+  margin: 0;
 }
