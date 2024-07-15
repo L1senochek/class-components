@@ -69,15 +69,24 @@ const CardModal: React.FC = (): JSX.Element | null => {
         <div>Loading details...</div>
       ) : (
         <>
-          <h2>{userDetails.login}</h2>
+          <h2 className={styles.userdetails__header}>{userDetails.login}</h2>
           <img
             className={styles.avatar}
             src={userDetails.avatar_url}
             alt={userDetails.login}
           />
-          <p>Followers: {userDetails.followers}</p>
-          <p>Following: {userDetails.following}</p>
-          <p>Public Repos: {userDetails.public_repos}</p>
+          <p>
+            <span className={styles.userdetails__highlight}>Followers:</span>
+            <span>{userDetails.followers}</span>
+          </p>
+          <p>
+            <span className={styles.userdetails__highlight}>Following:</span>
+            <span>{userDetails.following}</span>
+          </p>
+          <p>
+            <span className={styles.userdetails__highlight}>Public Repos:</span>
+            <span>{userDetails.public_repos}</span>
+          </p>
           <a
             href={userDetails.html_url}
             target="_blank"

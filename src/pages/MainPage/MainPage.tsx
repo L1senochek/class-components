@@ -122,7 +122,6 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
             onSearchSubmit={handleSearchSubmit}
           />
         </div>
-
         <button onClick={handleThrowError}>Throw Error</button>
       </header>
       <main className={styles['middle-section']}>

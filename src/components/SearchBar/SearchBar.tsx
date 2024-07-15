@@ -1,13 +1,17 @@
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import styles from './searchbar.module.css';
 import ISearchBarProps from '../../model/SearchBar';
+import IconLoupe from '../Icons/IconLoupe/IconLoupe';
 
 const SearchBar: React.FC<ISearchBarProps> = ({
   searchTerm,
   onInputChange,
   onSearchSubmit,
 }): JSX.Element => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     onInputChange(event.target.value);
   };
 
@@ -27,19 +31,28 @@ const SearchBar: React.FC<ISearchBarProps> = ({
     }
   };
 
+  const handleInputFocus = (): void => setIsFocused(!isFocused);
+  const handleButtonHover = (): void => setIsHovered(!isHovered);
+
   return (
-    <div className={styles.searchbar}>
+    <div
+      className={`${styles.searchbar} ${isFocused ? styles.focused : ''} ${isHovered ? styles.hovered : ''}`}
+      onFocus={handleInputFocus}
+      onBlur={handleInputFocus}
+      onMouseEnter={handleButtonHover}
+      onMouseLeave={handleButtonHover}
+    >
+      <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
+        <IconLoupe />
+      </button>
       <input
         className={styles.searchbar__input}
         type="text"
         value={searchTerm}
-        onChange={handleChange}
+        onChange={handleInputChange}
         placeholder="Search..."
         onKeyUp={handleKeyUp}
       />
-      <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
-        Search
-      </button>
     </div>
   );
 };

@@ -46,14 +46,21 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition:
+    border-color 0.5s,
+    box-shadow 0.5s;
 }
-button:hover {
-  border-color: #646cff;
-}
+
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
+}
+
+@media (hover: hover) {
+  button:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px 1px #00ffff;
+  }
 }
 
 @media (prefers-color-scheme: light) {

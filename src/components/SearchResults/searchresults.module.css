@@ -23,6 +23,11 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.87);
   gap: 10px;
+  cursor: pointer;
+  transition:
+    border-color 0.5s,
+    transform 0.5s,
+    box-shadow 0.5s;
 }
 
 .searchresults__header {
@@ -44,4 +49,15 @@
   overflow: overlay;
   width: 100%;
   text-align: left;
+}
+
+@media (hover: hover) {
+  .searchresults__card:hover {
+    border-color: #00ffff;
+    transform: translate(10px, -10px);
+    box-shadow: 0 0 15px 1px #00ffff;
+  }
+  .searchresults__card:hover > .searchresults__header {
+    color: #00ffff;
+  }
 }
