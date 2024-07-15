@@ -9,6 +9,7 @@ import Limit from '../../components/Limit/Limit';
 import styles from './main-page.module.css';
 import CardModal from '../../components/CardModal/CardModal';
 import IconGitHubLogo from '../../components/Icons/iconGitHub/iconGitHub';
+import Settings from '../../components/Settings/Settings';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [searchResults, setSearchResults] = useState([]);
@@ -125,7 +126,10 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
         <button onClick={handleThrowError}>Throw Error</button>
       </header>
       <main className={styles['middle-section']}>
-        <Limit limit={limit} onLimitChange={handleLimitChange} />
+        <div className={styles.settings__wrapper}>
+          <Limit limit={limit} onLimitChange={handleLimitChange} />
+          <Settings />
+        </div>
         {isLoading ? (
           <div>Loading...</div>
         ) : (

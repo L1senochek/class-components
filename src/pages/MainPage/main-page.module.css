@@ -34,3 +34,10 @@
 .logo__title {
   margin: 0;
 }
+
+.settings__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
