@@ -18,6 +18,7 @@ const Settings: React.FC<ISettings> = ({ parentClass }): JSX.Element => {
           isMenuOpen ? ` ${styles['open']}` : ''
         }`}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
+        onMouseEnter={() => setIsMenuOpen(true)}
       >
         <IconSettings />
       </div>

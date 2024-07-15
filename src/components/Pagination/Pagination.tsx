@@ -69,7 +69,7 @@ const Pagination: React.FC<PaginationProps> = ({
     }
 
     if (currentPage < totalPages - 1) {
-      pages.push(<span key="end-dots">...</span>);
+      pages.push(<span key="end-dots">. . .</span>);
     }
 
     if (totalPages > 1) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import useSearchQuery from '../../hooks/useSearchQuery';
 import { IAppProps } from '../../model/App';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -113,10 +113,10 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     <>
       <header className={styles['top-section']}>
         <div className={styles.logo}>
-          <div className={styles.logo__wrapper}>
+          <Link to={'/'} className={styles.logo__wrapper}>
             <IconGitHubLogo />
             <h1 className={styles.logo__title}>GitHub API</h1>
-          </div>
+          </Link>
           <SearchBar
             searchTerm={searchTerm}
             onInputChange={handleSearchInputChange}

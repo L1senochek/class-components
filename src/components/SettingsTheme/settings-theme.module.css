@@ -23,10 +23,10 @@
   transition: right 0.5s;
 }
 
-.settings__switcher.dark {
+.settings__switcher.light {
   right: 0;
 }
 
-.settings__switcher.light {
+.settings__switcher.dark {
   right: -20px;
 }
