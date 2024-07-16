@@ -2,15 +2,9 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styles from './pagination.module.css';
 import { MAX_ITEMS_LIMIT } from '../../utils/const';
+import IPaginationProps from '../../model/Pagination';
 
-interface PaginationProps {
-  totalItems: number;
-  limit: number;
-  currentPage: number;
-  onPageChange: (page: number) => void;
-}
-
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination: React.FC<IPaginationProps> = ({
   totalItems,
   limit,
   currentPage,

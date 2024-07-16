@@ -1,11 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styles from './limit.module.css';
-
-interface ILimitProps {
-  limit: number;
-  onLimitChange: (newLimit: number) => void;
-}
+import ILimitProps from '../../model/Limit';
 
 const Limit: React.FC<ILimitProps> = ({
   limit,

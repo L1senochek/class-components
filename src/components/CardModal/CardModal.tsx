@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './card-modal.module.css';
 import { useNavigate, useParams } from 'react-router';
-
-interface IUserDetails {
-  login: string;
-  avatar_url: string;
-  followers: number;
-  following: number;
-  public_repos: number;
-  html_url: string;
-}
+import IUserDetails from '../../model/CardModal';
 
 const CardModal: React.FC = (): JSX.Element | null => {
   const { userId } = useParams<{ userId: string }>();

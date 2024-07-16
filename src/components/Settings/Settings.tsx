@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import styles from './settings.module.css';
 import IconSettings from '../Icons/IconSettings/IconSettings';
 import SettingsTheme from '../SettingsTheme/SettingsTheme';
-
-interface ISettings {
-  parentClass?: string;
-}
+import ISettings from '../../model/Settings';
 
 const Settings: React.FC<ISettings> = ({ parentClass }): JSX.Element => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div
       className={`${styles['settings']}${parentClass ? ` ${parentClass}` : ''}`}
+      onMouseLeave={() => setIsMenuOpen(false)}
     >
       <div
         className={`${styles['settings__btn']}${
