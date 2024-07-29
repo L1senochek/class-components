@@ -1,4 +1,4 @@
-interface IGitHubUserCardProps {
+export interface IGitHubUserCardProps {
   id: string;
   login: string;
   avatar_url: string;

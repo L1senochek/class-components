@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, KeyboardEvent, useState } from 'react';
 import styles from './searchbar.module.css';
 import ISearchBarProps from '../../model/SearchBar';
 import IconLoupe from '../Icons/IconLoupe/IconLoupe';
@@ -18,31 +18,28 @@ const SearchBar: React.FC<ISearchBarProps> = ({
   const handleKeyUp = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      onSearchSubmitEnter(event);
+      onSearchSubmit();
     }
   };
 
-  const onSearchSubmitEnter = (
-    event: KeyboardEvent<HTMLInputElement>
-  ): void => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      onSearchSubmit();
-    }
+  const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    onSearchSubmit();
   };
 
   const handleInputFocus = (): void => setIsFocused(!isFocused);
   const handleButtonHover = (): void => setIsHovered(!isHovered);
 
   return (
-    <div
+    <form
       className={`${styles.searchbar} ${isFocused ? styles.focused : ''} ${isHovered ? styles.hovered : ''}`}
       onFocus={handleInputFocus}
       onBlur={handleInputFocus}
       onMouseEnter={handleButtonHover}
       onMouseLeave={handleButtonHover}
+      onSubmit={onSubmit}
     >
-      <button className={styles.searchbar__btn} onClick={onSearchSubmit}>
+      <button className={styles.searchbar__btn} type="submit">
         <IconLoupe />
       </button>
       <input
@@ -53,7 +50,7 @@ const SearchBar: React.FC<ISearchBarProps> = ({
         placeholder="Search..."
         onKeyUp={handleKeyUp}
       />
-    </div>
+    </form>
   );
 };
 

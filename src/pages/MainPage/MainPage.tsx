@@ -10,13 +10,11 @@ import styles from './main-page.module.css';
 import CardModal from '../../components/CardModal/CardModal';
 import IconGitHubLogo from '../../components/Icons/iconGitHub/iconGitHub';
 import Settings from '../../components/Settings/Settings';
+import { useFetchUsersQuery } from '../../api/api';
+import { SerializedError } from '@reduxjs/toolkit';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [, setError] = useState<null | Error>(null);
   const [throwError, setThrowError] = useState<boolean>(false);
-  const [totalUsers, setTotalUsers] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useSearchQuery('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -25,48 +23,18 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const limit = parseInt(searchParams.get('limit') || '10', 10);
+  const query = searchParams.get('query') || '';
 
-  const fetchGitHubUsers = async (
-    term: string,
-    limit: number = 10,
-    page: number = 1
-  ): Promise<void> => {
-    setIsLoading(true);
-    try {
-      const query =
-        term.trim() !== ''
-          ? encodeURIComponent(term.trim())
-          : encodeURIComponent('a');
-      const url = `https://api.github.com/search/users?q=${query}&per_page=${limit}&page=${page}`;
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error('Error fetching data');
-      }
-
-      const data = await response.json();
-
-      setSearchResults(data.items);
-      setTotalUsers(data.total_count);
-      localStorage.setItem('searchTerm', term.trim());
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      const newError =
-        error instanceof Error ? error : new Error('Unknown error');
-      setError(newError);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data, error, isLoading } = useFetchUsersQuery({
+    query,
+    page: currentPage,
+    perPage: limit,
+  });
 
   useEffect((): void => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
       setSearchTerm(savedSearchTerm);
-      fetchGitHubUsers(savedSearchTerm, limit, currentPage);
-    } else {
-      fetchGitHubUsers('', limit, currentPage);
     }
     localStorage.setItem('currentPage', currentPage.toString());
     localStorage.setItem('limit', limit.toString());
@@ -81,21 +49,20 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     searchParams.set('page', '1');
     setSearchParams(searchParams);
     localStorage.setItem('limit', newLimit.toString());
-    fetchGitHubUsers(searchTerm, newLimit, 1);
   };
 
-  const handleSearchSubmit = (): void => {
+  const handleSearchSubmit = () // event: React.FormEvent<HTMLFormElement>
+  : void => {
+    // event.preventDefault();
     searchParams.set('query', searchTerm);
     searchParams.set('page', '1');
     setSearchParams(searchParams);
-    fetchGitHubUsers(searchTerm, limit, 1);
   };
 
   const handlePageChange = (newPage: number): void => {
     searchParams.set('page', newPage.toString());
     setSearchParams(searchParams);
     localStorage.setItem('currentPage', newPage.toString());
-    fetchGitHubUsers(searchTerm, limit, newPage);
   };
 
   const handleItemClick = (itemId: string): void => {
@@ -132,14 +99,16 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
         </div>
         {isLoading ? (
           <div>Loading...</div>
+        ) : error ? (
+          <div> Error fetching data: {(error as SerializedError).message}</div>
         ) : (
           <SearchResults
-            searchResults={searchResults}
+            searchResults={data?.items || []}
             onItemClick={handleItemClick}
           />
         )}
         <Pagination
-          totalItems={totalUsers}
+          totalItems={data?.total_count || 0}
           limit={limit}
           currentPage={currentPage}
           onPageChange={handlePageChange}

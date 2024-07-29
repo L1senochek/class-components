@@ -19,7 +19,10 @@ const Router = createBrowserRouter(
         <Route
           path=""
           element={
-            <Navigate to={`/main?page=1&limit=10&query=${savedQuery}`} />
+            <Navigate
+              to={`/main?page=1&limit=10&query=${savedQuery}`}
+              replace
+            />
           }
         />
         <Route path="/main" element={<MainPage />}>

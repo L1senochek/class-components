@@ -1,12 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import themeReducer from './slices/themeSlice';
+import selectedItemsSlice from './slices/selectedItemsSlice';
+import { api } from '../api/api';
 
 const rootReducer = combineReducers({
-  theme: themeReducer.reducer,
+  selectedItems: selectedItemsSlice.reducer,
+  [api.reducerPath]: api.reducer,
 });
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
