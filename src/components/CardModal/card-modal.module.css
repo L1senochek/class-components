@@ -19,6 +19,10 @@
   justify-content: space-evenly;
 }
 
+.userdetails.light {
+  background-color: #c2c2c2;
+}
+
 .userdetails > p {
   gap: 10px;
   display: flex;
@@ -32,6 +36,13 @@
 
 .userdetails__highlight {
   color: #00ffff;
+}
+
+.userdetails.light > .userdetails__header {
+  color: #009999;
+}
+.userdetails.light > p > .userdetails__highlight {
+  color: #009999;
 }
 
 .closebtn {

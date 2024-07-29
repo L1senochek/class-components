@@ -1,64 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './card-modal.module.css';
-import { useNavigate, useParams } from 'react-router';
-import IUserDetails from '../../model/CardModal';
+import { useNavigate } from 'react-router';
+import { useFetchUserDetailsQuery } from '../../api/api';
+import useTheme from '../../context/useTheme';
 
-const CardModal: React.FC = (): JSX.Element | null => {
-  const { userId } = useParams<{ userId: string }>();
-  const [userDetails, setUserDetails] = useState<IUserDetails | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+interface ICardModalProps {
+  userId?: string;
+  onClose?: () => void;
+}
+
+const CardModal: React.FC<ICardModalProps> = ({
+  userId,
+  onClose,
+}): JSX.Element | null => {
+  const {
+    data: userDetails,
+    error,
+    isLoading,
+  } = useFetchUserDetailsQuery(userId!);
+
+  const { theme } = useTheme();
 
   const navigate = useNavigate();
-
-  useEffect((): void => {
-    if (
-      window.location.href.includes(`http://localhost:5173/main/user/${userId}`)
-    ) {
-      setIsOpen(true);
-      setIsLoading(true);
-    }
-    (async (): Promise<void> => {
-      try {
-        const response = await fetch(`https://api.github.com/user/${userId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch user details');
-        }
-        const userData = await response.json();
-        setUserDetails(userData);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [userId]);
 
   const handleClose = (): void => {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';
     const savedPage = localStorage.getItem('currentPage') || '1';
     const savedLimit = localStorage.getItem('limit') || '10';
-
+    onClose!();
     navigate(
       `/main?page=${savedPage}&limit=${savedLimit}&query=${savedSearchTerm}`
     );
-
-    setIsOpen(false);
   };
 
-  if (!isOpen) {
+  if (!userId) {
     return null;
   }
 
   return (
-    <div className={`${styles.userdetails} ${isOpen ? '' : styles.hidden}`}>
+    <div
+      className={`${styles.userdetails} ${userId ? '' : styles.hidden}${theme === 'dark' ? styles.dark : styles.light}`}
+    >
       <button className={styles.closebtn} onClick={handleClose}>
         Close
       </button>
-      {!userDetails ? (
-        <div>User details not found</div>
+      {error ? (
+        <div>Error fetching user details</div>
       ) : isLoading ? (
         <div>Loading details...</div>
+      ) : !userDetails ? (
+        <div>User details not found</div>
       ) : (
         <>
           <h2 className={styles.userdetails__header}>{userDetails.login}</h2>

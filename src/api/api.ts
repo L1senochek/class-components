@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IGitHubUserCardProps } from '../model/SearchResults';
+import IUserDetails from '../model/CardModal';
 
 export interface ISearchUsersResponse {
   items: IGitHubUserCardProps[];
@@ -20,7 +21,7 @@ export const api = createApi({
       query: ({ query, page, perPage }) =>
         `search/users?q=${query || 'a'}&per_page=${perPage}&page=${page}`,
     }),
-    fetchUserDetails: builder.query<IGitHubUserCardProps, string>({
+    fetchUserDetails: builder.query<IUserDetails, string>({
       query: (userId) => `user/${userId}`,
     }),
   }),

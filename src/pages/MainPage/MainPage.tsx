@@ -19,14 +19,15 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useSearchQuery('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { theme } = useTheme();
 
   const navigate = useNavigate();
 
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
-  const limit = parseInt(searchParams.get('limit') || '10', 10);
-  const query = searchParams.get('query') || '';
+  const currentPage = parseInt(localStorage.getItem('currentPage') || '1', 10);
+  const limit = parseInt(localStorage.getItem('limit') || '10', 10);
+  const query = localStorage.getItem('searchTerm') || '';
 
   const { data, error, isLoading } = useFetchUsersQuery({
     query,
@@ -68,7 +69,12 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
 
   const handleItemClick = (itemId: string): void => {
     setSelectedItemId(itemId);
+    setIsModalOpen(true);
     navigate(`/main/user/${itemId}`);
+  };
+
+  const handleCloseModal = (): void => {
+    setIsModalOpen(false);
   };
 
   const handleThrowError = (): void => setThrowError(true);
@@ -117,7 +123,9 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
-        {selectedItemId && <CardModal />}
+        {isModalOpen && selectedItemId && (
+          <CardModal userId={selectedItemId} onClose={handleCloseModal} />
+        )}
       </main>
     </>
   );
