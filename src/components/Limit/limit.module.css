@@ -13,3 +13,8 @@
   min-height: 30px;
   padding: 10px;
 }
+
+.limit.light > .limit__select {
+  background-color: #c2c2c2;
+  color: #000;
+}

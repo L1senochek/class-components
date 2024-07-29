@@ -8,10 +8,22 @@
   color: #fff;
 }
 
+.settings.light > .settings__item {
+  color: #000;
+}
+
 .settings__btn {
   padding: 0;
   width: 44px;
   border: 1px solid #00f1ff3d;
+}
+
+.settings.dark > .settings__btn {
+  border-color: #00f1ff3d;
+}
+
+.settings.light > .settings__btn {
+  background-color: #003f423d;
 }
 
 .settings__switcher {

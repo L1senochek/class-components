@@ -41,6 +41,14 @@
     border-style 0.5s;
 }
 
+.settings.dark > .settings__menu {
+  background-color: #1a1a1a;
+}
+
+.settings.light > .settings__menu {
+  background-color: #c2c2c2;
+}
+
 .settings__menu.open {
   height: 50px;
   border-style: solid;

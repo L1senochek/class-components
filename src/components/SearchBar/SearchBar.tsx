@@ -1,7 +1,14 @@
-import React, { ChangeEvent, FormEvent, KeyboardEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
+  useEffect,
+  useState,
+} from 'react';
 import styles from './searchbar.module.css';
 import ISearchBarProps from '../../model/SearchBar';
 import IconLoupe from '../Icons/IconLoupe/IconLoupe';
+import useTheme from '../../context/useTheme';
 
 const SearchBar: React.FC<ISearchBarProps> = ({
   searchTerm,
@@ -10,6 +17,8 @@ const SearchBar: React.FC<ISearchBarProps> = ({
 }): JSX.Element => {
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  const { theme } = useTheme();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     onInputChange(event.target.value);
@@ -30,9 +39,13 @@ const SearchBar: React.FC<ISearchBarProps> = ({
   const handleInputFocus = (): void => setIsFocused(!isFocused);
   const handleButtonHover = (): void => setIsHovered(!isHovered);
 
+  useEffect(() => {
+    localStorage.setItem('searchTerm', searchTerm);
+  }, [searchTerm]);
+
   return (
     <form
-      className={`${styles.searchbar} ${isFocused ? styles.focused : ''} ${isHovered ? styles.hovered : ''}`}
+      className={`${styles.searchbar} ${theme === 'dark' ? styles.dark : styles.light} ${isFocused ? styles.focused : ''} ${isHovered ? styles.hovered : ''}`}
       onFocus={handleInputFocus}
       onBlur={handleInputFocus}
       onMouseEnter={handleButtonHover}

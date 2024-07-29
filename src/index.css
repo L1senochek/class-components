@@ -13,6 +13,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root.dark {
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+:root.light {
+  color: #000;
+  background-color: #c2c2c2;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -54,6 +64,18 @@ button {
 button:focus,
 button:focus-visible {
   outline: none;
+}
+
+:root.light button {
+  background-color: #ffffff;
+  color: #000;
+  border-color: #ccc;
+}
+
+:root.dark button {
+  background-color: #1a1a1a;
+  color: rgba(255, 255, 255, 0.87);
+  border-color: transparent;
 }
 
 @media (hover: hover) {

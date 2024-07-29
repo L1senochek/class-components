@@ -12,12 +12,15 @@ import IconGitHubLogo from '../../components/Icons/iconGitHub/iconGitHub';
 import Settings from '../../components/Settings/Settings';
 import { useFetchUsersQuery } from '../../api/api';
 import { SerializedError } from '@reduxjs/toolkit';
+import useTheme from '../../context/useTheme';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [throwError, setThrowError] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useSearchQuery('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
+  const { theme } = useTheme();
 
   const navigate = useNavigate();
 
@@ -51,9 +54,7 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     localStorage.setItem('limit', newLimit.toString());
   };
 
-  const handleSearchSubmit = () // event: React.FormEvent<HTMLFormElement>
-  : void => {
-    // event.preventDefault();
+  const handleSearchSubmit = (): void => {
     searchParams.set('query', searchTerm);
     searchParams.set('page', '1');
     setSearchParams(searchParams);
@@ -80,7 +81,10 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     <>
       <header className={styles['top-section']}>
         <div className={styles.logo}>
-          <Link to={'/'} className={styles.logo__wrapper}>
+          <Link
+            to={'/'}
+            className={`${styles.logo__wrapper} ${theme === 'dark' ? styles.dark : styles.light}`}
+          >
             <IconGitHubLogo />
             <h1 className={styles.logo__title}>GitHub API</h1>
           </Link>

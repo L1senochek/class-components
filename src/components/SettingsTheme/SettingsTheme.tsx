@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './settings-theme.module.css';
+import useTheme from '../../context/useTheme';
 
 const SettingsTheme: React.FC = ({
   parentClass,
 }: {
   parentClass?: string;
 }): JSX.Element => {
-  const [darkTheme, setDarkTheme] = useState<boolean>(true);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div
-      className={`${styles['settings']}${parentClass ? ` ${parentClass}` : ''}`}
+      className={`${styles['settings']}${parentClass ? ` ${parentClass}` : ''} ${theme === 'dark' ? styles.dark : styles.light}`}
     >
       <span className={styles['settings__item']}>light</span>
       <button
         role="switch"
-        onClick={() => setDarkTheme(!darkTheme)}
+        onClick={toggleTheme}
         className={styles['settings__btn']}
       >
         <div
           className={`${styles['settings__switcher']} ${
-            darkTheme ? styles.dark : styles.light
+            theme === 'dark' ? styles.dark : styles.light
           }`}
         ></div>
       </button>
