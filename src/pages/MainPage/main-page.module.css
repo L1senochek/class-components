@@ -84,6 +84,7 @@
   background-color: #242424;
   gap: 15px;
   bottom: 2rem;
+  z-index: 10;
 }
 
 .flyout.light {
