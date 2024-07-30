@@ -160,7 +160,9 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
           <CardModal userId={selectedItemId} onClose={handleCloseModal} />
         )}
         {selectedItems.length > 0 && (
-          <div className={styles.flyout}>
+          <div
+            className={`${styles.flyout} ${theme === 'dark' ? styles.dark : styles.light}`}
+          >
             <p>{selectedItems.length} items selected</p>
             <div className={styles.flyout__buttons}>
               <button onClick={handleUnselectAll}>Unselect all</button>
