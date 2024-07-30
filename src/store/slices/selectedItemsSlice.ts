@@ -14,7 +14,9 @@ const selectedItemsSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<string>) => {
-      state.items.push(action.payload);
+      if (!state.items.includes(action.payload)) {
+        state.items.push(action.payload);
+      }
     },
     removeItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item !== action.payload);

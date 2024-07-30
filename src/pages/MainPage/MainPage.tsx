@@ -13,6 +13,11 @@ import Settings from '../../components/Settings/Settings';
 import { useFetchUsersQuery } from '../../api/api';
 import { SerializedError } from '@reduxjs/toolkit';
 import useTheme from '../../context/useTheme';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  clearItems,
+  selectSelectedItems,
+} from '../../store/slices/selectedItemsSlice';
 
 const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [throwError, setThrowError] = useState<boolean>(false);
@@ -22,8 +27,8 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { theme } = useTheme();
-
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const currentPage = parseInt(localStorage.getItem('currentPage') || '1', 10);
   const limit = parseInt(localStorage.getItem('limit') || '10', 10);
@@ -34,6 +39,8 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
     page: currentPage,
     perPage: limit,
   });
+
+  const selectedItems = useAppSelector(selectSelectedItems);
 
   useEffect((): void => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
@@ -78,6 +85,32 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
   };
 
   const handleThrowError = (): void => setThrowError(true);
+
+  const handleUnselectAll = () => dispatch(clearItems());
+
+  const handleDownload = () => {
+    const selectedData = (data?.items || []).filter((item) =>
+      selectedItems.includes(item.id)
+    );
+
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      ['id,login,html_url']
+        .concat(
+          selectedData.map(
+            (item) => `${item.id},${item.login},${item.html_url}`
+          )
+        )
+        .join('\n');
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `${selectedItems.length}_users.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (throwError) {
     throw new Error('Test error');
@@ -125,6 +158,15 @@ const MainPage: React.FC<IAppProps> = (): JSX.Element => {
         />
         {isModalOpen && selectedItemId && (
           <CardModal userId={selectedItemId} onClose={handleCloseModal} />
+        )}
+        {selectedItems.length > 0 && (
+          <div className={styles.flyout}>
+            <p>{selectedItems.length} items selected</p>
+            <div className={styles.flyout__buttons}>
+              <button onClick={handleUnselectAll}>Unselect all</button>
+              <button onClick={handleDownload}>Download</button>
+            </div>
+          </div>
         )}
       </main>
     </>
